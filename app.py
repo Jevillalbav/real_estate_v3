@@ -41,9 +41,6 @@ mapa_columns['unit'] = ['%','x','USD','USD','USD','%','%','%','bp','USD','x','%'
 general = pd.read_csv('data/general_parameters.csv', index_col=0)
 general_2 = pd.read_csv('data/general_parameters_2.csv', index_col=0)
 
-def filter_summary(states_f, city_f, slice_f, horizon_f):
-    return summary[(summary['state'] == states_f) & (summary['city'] == city_f) & (summary['slice'] == slice_f) & (summary['horizon'] == horizon_f)]
-
 with st.expander('States Filter'):
     st.session_state.selected_states = states
     selected_states = st.multiselect('**Select States**', states, default=st.session_state.selected_states)
@@ -64,14 +61,25 @@ with st.sidebar:
         st.rerun()
     st.markdown('--'*20)
 
-# Filter summary
-summary_filtered = summary[(summary['slice'] == st.session_state.slice) & (summary['state'].isin(selected_states)) & (summary['population'] >= int(st.session_state.population))
-                           & (summary['horizon'] == st.session_state.horizon)
-                           ].copy()
-summary_filtered['npv/equity'] = summary_filtered['npv'] / summary_filtered['equity']
-if summary_filtered.empty:
-    st.error('No data available for the selected filters')
-    st.stop()
+
+    st.subheader('Indivual Market Filters')
+    selected_state = st.selectbox('Select State', selected_states, index=0)
+    st.session_state.selected_state = selected_state
+
+    selected_cities = summary[summary['state'] == selected_state]['city'].unique()
+    selected_city = st.selectbox('Select City', selected_cities, index=0)
+    st.session_state.selected_city = selected_city
+
+    selected_slices_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city)]['slice'].unique()
+    selected_slice_city = st.selectbox('Select Class', selected_slices_city, index=0, key='slice_city')
+    st.session_state.selected_slice_city = selected_slice_city
+
+    selected_horizon_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city) & 
+                                    (summary['slice'] == selected_slice_city)]['horizon'].unique()
+    selected_horizon_city = st.selectbox('Select Horizon (Last Years)', selected_horizon_city, index=0, key='horizon_city')
+    st.session_state.selected_horizon_city = selected_horizon_city
+
+
 
 unidad_columna = mapa_columns.loc[filtro_columnas_mapa_mostrar].values[1]
 
@@ -79,7 +87,6 @@ def transformar_value(column, unidad):
     if unidad in ['%', 'bp']:
         return column.round(4 if unidad == '%' else 0)
     return column.round(2 if unidad == 'x' else 0)
-
 def valor_a_mostrar(column, unidad):
     if unidad == '%':
         return f'{column:.2%}'
@@ -89,7 +96,6 @@ def valor_a_mostrar(column, unidad):
         return f'USD {column:,.0f}'
     elif unidad == 'bp':
         return f'{column:.0f} bp'
-
 # Función para asignar colores basados en IRR
 def get_color(value, column_name):
     if value > 90:
@@ -105,58 +111,13 @@ def get_color(value, column_name):
     elif value <= 5:
         return [255, 0, 0, 200]
 
-summary_filtered['value'] = transformar_value(summary_filtered[st.session_state.filtro_columnas_mapa], unidad_columna)
-summary_filtered['value_show'] = summary_filtered['value'].apply(lambda x: valor_a_mostrar(x, unidad_columna))
-## ELIJO LA COLUMNA POR LA CUAL QUIERO FILTRAR
-summary_filtered = summary[(summary['slice'] == st.session_state.slice) & (summary['state'].isin(selected_states)) & (summary['population'] >= int(st.session_state.population))
-                           & (summary['horizon'] == st.session_state.horizon)
+summary_filtered = summary[(summary['slice'] == st.session_state.slice) & 
+                           (summary['state'].isin(selected_states)) & 
+                           (summary['population'] >= int(st.session_state.population)) &
+                           (summary['horizon'] == st.session_state.horizon)
                            ].copy()
 summary_filtered['npv/equity'] = summary_filtered['npv'] / summary_filtered['equity']
-if summary_filtered.empty:
-    st.error('No data available for the selected filters')
-    st.stop()
 
-unidad_columna = mapa_columns.loc[filtro_columnas_mapa_mostrar].values[1]
-
-def transformar_value(column, unidad):
-    if unidad in ['%', 'bp']:
-        return column.round(4 if unidad == '%' else 0)
-    return column.round(2 if unidad == 'x' else 0)
-
-def valor_a_mostrar(column, unidad):
-    if unidad == '%':
-        return f'{column:.2%}'
-    elif unidad == 'x':
-        return f'{column:.2f}x'
-    elif unidad == 'USD':
-        return f'USD {column:,.0f}'
-    elif unidad == 'bp':
-        return f'{column:.0f} bp'
-    
-# Función para asignar colores basados en IRR
-def get_color(value, column_name):
-    #if value >  column_name.quantile(0.85):
-    if value > 90:
-        return [0, 128, 0, 200]  # Verde más oscuro
-    #elif value > column_name.quantile(0.7):
-    elif value > 75:
-        return [144, 238, 144, 200]  # Verde super claro
-    #elif value > column_name.quantile(0.4):
-    elif value > 50:
-        # verde limon
-        return [173, 200, 47, 200]
-    #elif value > column_name.quantile(0.1):
-    elif value > 30:
-        # amarillo
-        return [255, 255, 0, 200]
-    elif value > 5:
-        # naranja
-        return [255, 165, 0, 200] 
-    #elif value <= column_name.quantile(0.1):
-    elif value <= 5:
-        # rojo
-        return [255, 0, 0, 200]
-# Añadimos una nueva columna para los colores
 
 summary_filtered['value'] = transformar_value(summary_filtered[st.session_state.filtro_columnas_mapa], unidad_columna)
 summary_filtered['value_show'] = summary_filtered['value'].apply(lambda x: valor_a_mostrar(x, unidad_columna))
@@ -168,7 +129,6 @@ summary_filtered['color_no_list'] = summary_filtered['color'].apply(lambda x: f'
 summary_filtered['market'] = summary_filtered['market'].str.replace(',', ' - ')
 summary_filtered['log_population'] = (summary_filtered['population']) ** 0.5
 summary_filtered['population_millions'] = (summary_filtered['population'] / 1_000_000).round(2).astype(str) + 'M'
-
 
 ##########
 col1 , col2  = st.columns([1.8, 1.1])
@@ -222,7 +182,12 @@ with col1:
     st.pydeck_chart(
         pdk.Deck(
             #map_style="mapbox://styles/mapbox/light-v9",
-            map_style="mapbox://styles/mapbox/streets-v11",
+            #map_style="mapbox://styles/mapbox/streets-v11",
+            #map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            map_style="mapbox://styles/mapbox/outdoors-v11",
+            #map_style="mapbox://styles/mapbox/light-v9",
+
+
             initial_view_state=view_state,
             layers=[irr_layer, population_layer],
             tooltip={
@@ -245,7 +210,6 @@ with col1:
         ),
         use_container_width=True
         )
-
 with col2:
     subcol1, subcol2 = st.columns([0.2, 1])
     with subcol2:
@@ -279,52 +243,56 @@ with col2:
                 The size of the circles is proportional to the population of the city.''')
 
 st.subheader('US Markets Summary', divider= 'blue')
+st.write('The table below shows the summary of the selected markets,  you can sort them pressing the column name')
 
 data_show = summary_filtered[['market', 'current_price','market_cagr','noi_cap_rate_compounded',
-                               'fixed_interest_rate', 'operation_cashflow','market_cap_appreciation_bp', 'irr', 
+                               'operation_cashflow','market_cap_appreciation_bp', 'irr', 
                                 'npv', 'npv/equity',  'equity_multiple', 'demand_vs_supply',
                                 'demand_yoy_growth', 'supply_yoy_growth']]
-data_show = data_show.sort_values( st.session_state.filtro_columnas_mapa, ascending=False)
+
+if st.session_state.filtro_columnas_mapa in data_show.columns:
+     data_show = data_show.sort_values( st.session_state.filtro_columnas_mapa, ascending=False)
+else:
+    pass
+
 data_show.columns = ['Market', 'Current Price','Market CAGR', 'NOI Cap Rate Compounded',
-                        'Fixed Interest Rate', 'Operation Cashflow', 'M. Cap BP', 'IRR', 'NPV', 'NPV/Equity', 'Equity Multiple', 'Demand vs Supply', 'Demand YoY Growth', 'Supply YoY Growth']
+                        'Operation Cashflow', 'M. Cap BP', 'IRR', 'NPV', 'NPV/Equity', 'Equity Multiple', 'Demand vs Supply', 'Demand YoY Growth', 'Supply YoY Growth']
 
 for col in ['Current Price','NPV']:
     data_show[col] = data_show[col].apply(lambda x: f'${x:,.0f}')
-for col in ['Market CAGR', 'NOI Cap Rate Compounded', 'Fixed Interest Rate', 'Operation Cashflow', 'IRR',]:
+for col in ['Market CAGR', 'NOI Cap Rate Compounded', 'Operation Cashflow', 'IRR',]:
     data_show[col] = data_show[col].apply(lambda x: f'{x:.2%}')
 
 data_show['Demand vs Supply'] = data_show['Demand vs Supply'].apply(lambda x: f'{x:.2%}')
 data_show['Demand YoY Growth'] = data_show['Demand YoY Growth'].apply(lambda x: f'{x:.2%}')
 data_show['Supply YoY Growth'] = data_show['Supply YoY Growth'].apply(lambda x: f'{x:.2%}')
+event =  st.dataframe(data_show.set_index('Market').drop(columns = ['Demand YoY Growth','Supply YoY Growth']), 
+                      selection_mode=['single-row'], 
+                      height=290, use_container_width=True)
+
+###3 filtros por estado y mercado singulares para examinar por separado
+st.header('Individual Market Analysis 🏠', divider= 'blue')
+st.write('''Tables below show individual market (and slice) analysis, starting from latest IRR from 10 Yrs, 
+         5 Yrs and expected IRR for the next 5 Yrs. Then the current cashflow analysis ''')
 
 
-event =  st.dataframe(data_show.set_index('Market')
-             , selection_mode=['single-row', 'multi-column'], key='dataframe', on_select='rerun', height=290, use_container_width=True)
 
-if len(event.selection.rows) > 0:
-    selection_event = event.selection.rows[-1]
-else:
-    selection_event = 0
+col1, col2 = st.columns([3, 1])
 
-data_selected_market = data_show.iloc[selection_event]['Market']
+with col1:
+    cashflow_filtered = cashflow.loc[(cashflow['state'] == selected_state) & 
+                                    (cashflow['city'] == selected_city) & 
+                                    (cashflow['slice'] == selected_slice_city) & 
+                                    (cashflow['horizon'] == selected_horizon_city)].copy()
+    cashflow_filtered_show = cashflow_filtered[['price','equity','revenue','debt_payment','loan_payoff','valuation','cashflow']].copy()
 
-state = data_selected_market.split(' - ')[1]
-city = data_selected_market.split(' - ')[0]
+    for i in cashflow_filtered_show.columns:
+        cashflow_filtered_show[i] = cashflow_filtered_show[i].apply(lambda x: f'${x:,.0f}') 
 
-st.header('Individual Market Analysis', divider= 'blue')
-st.subheader(f'{data_selected_market} Market Analysis')
+    cashflow_filtered_show.columns = ['Price','Equity','Revenue','Debt Payment','Loan Payoff','Valuation','Cashflow']
+    cashflow_filtered_show.index = cashflow_filtered_show.index.strftime('%Y-%m-%d')
+    st.subheader('Cashflow Analysis')
+    st.write('The table below shows the cashflow analysis for the selected market')
+    st.dataframe(use_container_width=True, data=cashflow_filtered_show, height=420)
 
-cashflow_filtered = cashflow.query('state == @state & city == @city & slice == @slice & horizon == @horizon')
-cashflow_filtered_show = cashflow_filtered[['price','equity','revenue','debt_payment','loan_payoff','valuation','cashflow']].copy()
-for i in cashflow_filtered_show.columns:
-    cashflow_filtered_show[i] = cashflow_filtered_show[i].apply(lambda x: f'${x:,.0f}') 
-cashflow_filtered_show.columns = ['Price','Equity','Revenue','Debt Payment','Loan Payoff','Valuation','Cashflow']
-cashflow_filtered_show.index = cashflow_filtered_show.index.strftime('%Y-%m-%d')
 
-st.dataframe(use_container_width=True, data=cashflow_filtered_show)
-
-summary_filtered_city = filter_summary(state, city, slice, horizon)
-equilibrium_filtered = equilibrium.query('state == @state & city == @city & slice == @slice & horizon == @horizon')
-
-st.subheader('Market Summary')
-st.write(summary_filtered_city)

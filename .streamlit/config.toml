@@ -1,4 +1,6 @@
 [theme]
-base="dark"
-backgroundColor="#011029"
-secondaryBackgroundColor="#02061a"
+base="light"
+primaryColor="#d4af37"  # Golden, symbolizing the team's prestige
+backgroundColor="#ffffff"  # White, inspired by the club's iconic kit
+secondaryBackgroundColor="#f8f4e3"  # Soft cream/golden hint for contrast
+textColor="#000000"  # Black for readability
