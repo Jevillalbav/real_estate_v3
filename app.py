@@ -278,7 +278,6 @@ with col2:
         st.markdown('''**Map Notes:** The height of the bars is proportional to the value you're filtering, and the color is based on percentiles.  
                 The size of the circles is proportional to the population of the city.''')
 
-
 st.subheader('US Markets Summary', divider= 'blue')
 
 data_show = summary_filtered[['market', 'current_price','market_cagr','noi_cap_rate_compounded',
