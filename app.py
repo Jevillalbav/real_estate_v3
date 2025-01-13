@@ -5,7 +5,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pydeck as pdk
 
-st.set_page_config(layout="wide", page_title="Real Estate Report", page_icon="🏠")
+st.set_page_config(layout="wide", page_title="Real Estate Report", page_icon="🏠", 
+                    initial_sidebar_state="collapsed")
+        
 
 st.header("Real Estate Report per US Market 🏠", divider= 'blue')
 
@@ -45,7 +47,7 @@ with st.expander('States Filter'):
     st.session_state.selected_states = states
     selected_states = st.multiselect('**Select States**', states, default=st.session_state.selected_states)
 
-# Sidebar filters
+
 with st.sidebar:
     slice = st.selectbox('Select Class', options=classes, index=0)
     st.session_state.slice = slice
@@ -76,9 +78,8 @@ with st.sidebar:
 
     selected_horizon_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city) & 
                                     (summary['slice'] == selected_slice_city)]['horizon'].unique()
-    selected_horizon_city = st.selectbox('Select Horizon (Last Years)', selected_horizon_city, index=0, key='horizon_city')
+    selected_horizon_city = st.selectbox('Select Horizon - To specify cashflow, loan conditions etc', selected_horizon_city, index=0, key='horizon_city')
     st.session_state.selected_horizon_city = selected_horizon_city
-
 
 
 unidad_columna = mapa_columns.loc[filtro_columnas_mapa_mostrar].values[1]
@@ -271,28 +272,177 @@ event =  st.dataframe(data_show.set_index('Market').drop(columns = ['Demand YoY 
                       height=290, use_container_width=True)
 
 ###3 filtros por estado y mercado singulares para examinar por separado
-st.header('Individual Market Analysis 🏠', divider= 'blue')
+st.header('Individual Market Analysis 🏠' + selected_state + '  - ' + selected_city + ' - '+
+            selected_slice_city + ' - ' + str(selected_horizon_city) + ' Yrs'
+          , divider= 'blue')
+
 st.write('''Tables below show individual market (and slice) analysis, starting from latest IRR from 10 Yrs, 
-         5 Yrs and expected IRR for the next 5 Yrs. Then the current cashflow analysis ''')
+         5 Yrs and expected IRR for the next 5 Yrs. Then the current cashflow analysis,  and later other perfromance metrics for the selected specific horizon''')
 
 
 
-col1, col2 = st.columns([3, 1])
-
-with col1:
-    cashflow_filtered = cashflow.loc[(cashflow['state'] == selected_state) & 
-                                    (cashflow['city'] == selected_city) & 
-                                    (cashflow['slice'] == selected_slice_city) & 
-                                    (cashflow['horizon'] == selected_horizon_city)].copy()
-    cashflow_filtered_show = cashflow_filtered[['price','equity','revenue','debt_payment','loan_payoff','valuation','cashflow']].copy()
-
-    for i in cashflow_filtered_show.columns:
-        cashflow_filtered_show[i] = cashflow_filtered_show[i].apply(lambda x: f'${x:,.0f}') 
-
-    cashflow_filtered_show.columns = ['Price','Equity','Revenue','Debt Payment','Loan Payoff','Valuation','Cashflow']
-    cashflow_filtered_show.index = cashflow_filtered_show.index.strftime('%Y-%m-%d')
-    st.subheader('Cashflow Analysis')
-    st.write('The table below shows the cashflow analysis for the selected market')
-    st.dataframe(use_container_width=True, data=cashflow_filtered_show, height=420)
 
 
+
+
+
+
+
+
+
+
+
+
+st.subheader('IRR Analysis: 10 Yrs, 5 Yrs and Expected IRR for the next 5 Yrs', 
+                divider= 'green')
+
+irr_1, irr_2, irr_3 = st.columns(3)
+
+def filter_table(table, state, city, slice, horizon):
+    table_ = table[(table['state'] == state) 
+                  & (table['city'] == city) 
+                  & (table['slice'] == slice) 
+                  & (table['horizon'] == horizon)].copy()
+    table_ = table_.drop(columns=['state', 'city', 'slice', 'horizon'])
+    return table_
+
+def transform_data(summary, general_2, selected_state, selected_city, selected_slice_city, selected_horizon_city, filter_table):
+    s_10 = filter_table(summary, selected_state, selected_city, selected_slice_city, selected_horizon_city)
+    g_10 = general_2.rename({'value': 'Value'}, axis = 1).T.copy()
+    g_10.columns = ['Loan to Value', 
+                'Opex', 
+                'Interest Rate', 
+                'Spread', 
+                'Net Rate',
+                'Loan Term']
+
+    for i in ['Loan to Value', 
+                'Opex', 
+                'Interest Rate', 
+                'Spread', 
+                'Net Rate']:
+        g_10[i] = g_10[i].apply(lambda x: f'{x:.2%}')
+    g_10['Loan Term'] = g_10['Loan Term'].apply(lambda x: f'{x:.0f} Yrs')
+
+    s_10 = s_10[['current_price', 
+             'loan', 
+             'equity', 
+             'market_cagr',  
+             'noi_cap_rate_compounded',
+             'operation_cashflow',
+             'market_cap_appreciation_bp',
+             'irr', 
+             'equity_multiple', 
+             'demand_vs_supply',
+             'demand_yoy_growth',
+             'supply_yoy_growth']]
+
+    for i in ['current_price', 
+             'loan', 
+             'equity'
+             ]:
+        s_10[i] = s_10[i].apply(lambda x: f'${x:,.0f}')
+    for i in ['market_cagr',
+          'noi_cap_rate_compounded',
+            'operation_cashflow',
+            'irr', 
+            'demand_vs_supply',
+            'demand_yoy_growth',
+            'supply_yoy_growth']:
+        s_10[i] = s_10[i].apply(lambda x: f'{x:.2%}')
+
+    for i in ['market_cap_appreciation_bp', 'equity_multiple']:
+        s_10[i] = s_10[i].apply(lambda x: f'{x:.2f}')
+
+    s_10.columns = [ i.replace('_',' ').title() for i in s_10.columns]
+    s_10 = s_10.T
+    s_10.columns = ['Value']
+          
+    con_10 = pd.concat([s_10, g_10.T], axis=0)
+    con_10 = con_10.loc[[
+                    'Current Price',
+                    'Loan to Value', 
+                    'Loan', 
+                    'Equity', 
+                    'Opex',
+                    'Interest Rate', 
+                    'Spread', 
+                    'Net Rate',
+                    'Loan Term',
+                    'Irr', 
+                    'Equity Multiple',
+                    'Market Cagr', 
+                    'Noi Cap Rate Compounded',
+                    'Operation Cashflow',
+                    'Market Cap Appreciation Bp',
+                    'Demand Vs Supply',
+                    'Demand Yoy Growth',
+                    'Supply Yoy Growth',
+                    ]]
+
+    return st.dataframe(con_10, height=670, use_container_width=True)
+
+with irr_1:
+    # Bold
+    if selected_horizon_city == 10:
+        st.subheader('IRR Analysis: 10 Yrs')
+    else:
+        st.write('Analysis: 10 Yrs (2015Q1-2025Q1)')
+    transform_data(summary, general_2, selected_state, selected_city, selected_slice_city, 10, filter_table)
+with irr_2:
+    if selected_horizon_city == 5:
+        st.subheader('IRR Analysis: 5 Yrs')
+    else:
+        st.write('Analysis: 5 Yrs (2020Q1-2025Q1)')
+    transform_data(summary, general, selected_state, selected_city, selected_slice_city, 5, filter_table)
+
+
+with irr_3:
+    pass
+
+
+st.subheader('Cashflow Analysis 🏦' + selected_state + '  - ' + selected_city + ' - '+
+            selected_slice_city + ' - ' + str(selected_horizon_city) + ' Yrs'
+             , divider= 'green')
+st.write('The table below shows the cashflow analysis for the selected market, slice and horizon')
+c_current = filter_table(cashflow, selected_state, selected_city, selected_slice_city, selected_horizon_city).drop(columns=['market'])
+c_current.index = pd.to_datetime(c_current.index).strftime('%Y-%m')
+for i in c_current.columns:
+    c_current[i] = c_current[i].apply(lambda x: f'${x:,.0f}' )
+c_current.columns = [i.replace('_',' ').title() for i in c_current.columns]
+
+c_current = c_current[['Price', 'Revenue', 'Equity', 'Noi', 
+                       'Debt Payment', 'Loan Payoff', 'Valuation', 'Cashflow'
+                       ]]
+st.dataframe(c_current, use_container_width=True)
+
+st.subheader('Financial Analysis 📊' + selected_state + '  - ' + selected_city + ' - '+
+            selected_slice_city + ' - ' + str(selected_horizon_city) + ' Yrs'
+             , divider= 'green')
+st.write('The table below shows the financial analysis raw data for the selected market, slice and horizon')
+
+e_current = filter_table(table, selected_state, selected_city, selected_slice_city, selected_horizon_city).drop(columns=['market'])
+e_current.index = pd.to_datetime(e_current.index).strftime('%Y-%m')
+for i in ['market_cap_rate', 'market_effective_rent_growth_12_mo', 'market_sale_price_growth', 
+          'occupancy_rate', 'opex']:
+    e_current[i] = e_current[i].fillna(0).apply(lambda x: f'{x:.2%}')
+
+for i in ['market_effective_rentunit', 'market_sale_price_per_unit', 'revenue', 'noi']: 
+    e_current[i] = e_current[i].fillna(0).apply(lambda x: f'${x:,.0f}')
+
+e_current.columns = ['Cap Rate', 
+                    'Rent Growth YoY', 
+                    'Effective Rent', 
+                    'Sale Price Growth',
+                    'Sale Price', 
+                    'Occupancy',
+                    'Revenue', 
+                    'OPEX', 
+                    'NOI']
+
+e_current = e_current[['Sale Price', 'Effective Rent','Cap Rate','Occupancy',
+                       'Revenue', 
+                       'OPEX', 
+                       'NOI']]
+
+st.dataframe(e_current, use_container_width=True)
