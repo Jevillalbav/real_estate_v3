@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import pydeck as pdk
 
 st.set_page_config(layout="wide", page_title="Real Estate Report", page_icon="🏠", 
-                    initial_sidebar_state="collapsed")
+                    initial_sidebar_state="expanded")
 
 
 st.header("Real Estate Report per US Market 🏠", divider= 'blue')
@@ -64,10 +64,10 @@ with st.sidebar:
     st.session_state.filtro_columnas_mapa = mapa_columns.loc[filtro_columnas_mapa_mostrar].values[0]
     if st.button('Reset Filters'):
         st.rerun()
-    st.markdown('--'*20)
 
 
-    st.subheader('Indivual Market Filters')
+
+    st.header('Individual Market Filters', divider= 'blue')
     selected_state = st.selectbox('Select State', selected_states, index=0)
     st.session_state.selected_state = selected_state
 
