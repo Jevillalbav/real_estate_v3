@@ -45,6 +45,7 @@ mapa_columns['unit'] = ['%','x','USD','USD','USD','%','%','%','bp','USD','x','%'
 
 general = pd.read_csv('data/general_parameters.csv', index_col=0)
 general_2 = pd.read_csv('data/general_parameters_2.csv', index_col=0)
+general_3 = pd.read_csv('data/general_parameters_3.csv', index_col=0)
 
 with st.expander('States Filter'):
     st.session_state.selected_states = states
@@ -461,7 +462,7 @@ with irr_3:
     else:
         st.write('Analysis: 5 Yrs Ahead (2025Q1-2030Q1)')
     
-    transform_data(summary, general, selected_state, selected_city, selected_slice_city, '5 Yrs Ahead (2025-2030)', filter_table)
+    transform_data(summary, general_3, selected_state, selected_city, selected_slice_city, '5 Yrs Ahead (2025-2030)', filter_table)
 
 
 st.subheader('Cashflow Analysis 🏦' + selected_state + '  - ' + selected_city + ' - '+
