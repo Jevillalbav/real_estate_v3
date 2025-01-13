@@ -57,7 +57,7 @@ with st.sidebar:
     horizon = st.selectbox('Select Horizon (Last Years)', options=horizons, index=0)
     st.session_state.horizon = horizon
     box_selector_pop = ['All','+2M' , '+3M' , '+5M', '+7M', '+10M']
-    population = st.selectbox('Select Population', options=box_selector_pop, index=2)
+    population = st.selectbox('Select Population', options=box_selector_pop, index=0)
     result = population.replace('+', '').replace('.', '').replace('M', '000000').replace('K', '000').replace('All', '0')
     st.session_state.population = result
     filtro_columnas_mapa_mostrar = st.selectbox('Aspect to classify', options=mapa_columns.index, index=0)
