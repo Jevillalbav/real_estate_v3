@@ -56,7 +56,7 @@ with st.sidebar:
     st.session_state.slice = slice
     horizon = st.selectbox('Select Horizon (Last Years)', options=horizons, index=0)
     st.session_state.horizon = horizon
-    box_selector_pop = ['All','+100K', '+500K', '+1M', '+2M' , '+3M' , '+5M', '+7M', '+10M']
+    box_selector_pop = ['All','+2M' , '+3M' , '+5M', '+7M', '+10M']
     population = st.selectbox('Select Population', options=box_selector_pop, index=2)
     result = population.replace('+', '').replace('.', '').replace('M', '000000').replace('K', '000').replace('All', '0')
     st.session_state.population = result
