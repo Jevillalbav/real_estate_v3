@@ -7,7 +7,7 @@ import pydeck as pdk
 
 st.set_page_config(layout="wide", page_title="Real Estate Report", page_icon="🏠", 
                     initial_sidebar_state="collapsed")
-        
+
 
 st.header("Real Estate Report per US Market 🏠", divider= 'blue')
 
@@ -27,6 +27,9 @@ summary = pd.read_csv('data/summaries.csv', index_col=0, parse_dates=True).drop(
 table = pd.read_csv('data/tables.csv', index_col=0, parse_dates=True).drop(columns=['date_calculated'])
 table['state'] = table['market'].str.split(',').str[1]
 table['city'] = table['market'].str.split(',').str[0]
+
+df = pd.read_csv('data/CoStar_cleaned.csv')
+
 
 # Market Filters
 states = summary['state'].unique()
@@ -279,6 +282,61 @@ st.header('Individual Market Analysis 🏠' + selected_state + '  - ' + selected
 st.write('''Tables below show individual market (and slice) analysis, starting from latest IRR from 10 Yrs, 
          5 Yrs and expected IRR for the next 5 Yrs. Then the current cashflow analysis,  and later other perfromance metrics for the selected specific horizon''')
 
+df_filtered = df.loc[(df['state'] == selected_state) & (df['city'] == selected_city) & (df['slice'] == selected_slice_city)]
+df_filtered = df_filtered.pivot_table(index='date', columns='concept', values='value')
+df_filtered.index = pd.to_datetime(df_filtered.index)
+df_filtered = df_filtered.sort_index()
+df_filtered = df_filtered.rename({'market_effective_rentunit': 'rent', 'market_sale_price_per_unit': 'sale_price', 'occupancy_rate': 'occupancy'}, axis=1)
+
+
+df_filtered_current = df_filtered.loc[:'2025-03-31'].iloc[:-1]
+df_filtered_forward = df_filtered.loc['2025-03-31':]
+
+fig = go.Figure()
+fig.update_layout(template='simple_white', title='Market Metrics: ' + selected_state + ' - ' + selected_city + ' - ' + selected_slice_city, 
+                  width = 1000, height=700,
+                  xaxis = dict(title='Date', showgrid=False, zeroline=False, tickformat='%Y-%m', 
+                               tickfont=dict(size=15, color='black'), domain=[0, 0.9]),
+                  yaxis = dict(title='Price (USD)', tickformat='$,.0f', 
+                                 showgrid=False, zeroline=False, tickfont=dict(size=15, color='darkblue'), titlefont=dict(size=15, color='darkblue')),
+
+                yaxis2=dict(title='Rent (USD)', overlaying='y', side='right',  showgrid=False, zeroline=False, 
+                            tickfont=dict(size=15, color='darkgreen'), position=0.95, titlefont=dict(size=15, color='darkgreen'), visible=False),
+                yaxis3=dict(title='Occupancy (%)', overlaying='y', side='right', showgrid=False, zeroline=False,  visible=False, 
+                            range=[0.5, 1.25]),
+                showlegend = False,  
+                hovermode='x'
+                )
+
+fig.add_trace(go.Scatter(x=df_filtered_current.index, y=df_filtered_current['sale_price'], mode='lines', name='Price', 
+                         line=dict(color='darkblue', width=2), hovertemplate='$%{y:,.0f}'))
+
+
+fig.add_trace(go.Scatter(x=df_filtered_current.index, y=df_filtered_current['rent'], mode='lines', name='Rent',
+                            line=dict(color='darkgreen', width=2), yaxis='y2', hovertemplate='$%{y:,.0f}'))
+
+fig.add_trace(go.Scatter(x=df_filtered_current.index, y=df_filtered_current['occupancy'], mode='lines', name='Occupancy',
+                            line=dict(color='darkred', width=2), yaxis='y3', hovertemplate='%{y:.2%}', 
+                            ))
+
+fig.add_trace(go.Scatter(x=df_filtered_forward.index, y=df_filtered_forward['sale_price'], mode='lines', name='Price (Fcst)', 
+                         line=dict(color='darkblue', width=2, dash='dot'), hovertemplate='$%{y:,.0f}'))
+
+fig.add_trace(go.Scatter(x=df_filtered_forward.index, y=df_filtered_forward['rent'], mode='lines', name='Rent (Fcst)',
+                            line=dict(color='darkgreen', width=2, dash='dot'), yaxis='y2', hovertemplate='$%{y:,.0f}'))
+
+fig.add_trace(go.Scatter(x=df_filtered_forward.index, y=df_filtered_forward['occupancy'], mode='lines', name='Occupancy (Fcst)',
+                            line=dict(color='darkred', width=2, dash='dot'), yaxis='y3', hovertemplate='%{y:.2%}', 
+                            ))
+# background color transparent
+fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
+
+
+st.plotly_chart(fig, use_container_width=True, theme=None)
+
+
+
+
 
 
 
@@ -384,21 +442,26 @@ def transform_data(summary, general_2, selected_state, selected_city, selected_s
 
 with irr_1:
     # Bold
-    if selected_horizon_city == 10:
-        st.subheader('IRR Analysis: 10 Yrs')
+    if selected_horizon_city == '10 Yrs (2015-2025)':
+        st.subheader('IRR Analysis: 10 Yrs (2015-2025)')
     else:
         st.write('Analysis: 10 Yrs (2015Q1-2025Q1)')
-    transform_data(summary, general_2, selected_state, selected_city, selected_slice_city, 10, filter_table)
+    transform_data(summary, general_2, selected_state, selected_city, selected_slice_city,'10 Yrs (2015-2025)', filter_table)
 with irr_2:
-    if selected_horizon_city == 5:
-        st.subheader('IRR Analysis: 5 Yrs')
+    if selected_horizon_city == '5 Yrs (2020-2025)':
+        st.subheader('IRR Analysis: 5 Yrs (2020-2025)')
     else:
         st.write('Analysis: 5 Yrs (2020Q1-2025Q1)')
-    transform_data(summary, general, selected_state, selected_city, selected_slice_city, 5, filter_table)
+    transform_data(summary, general, selected_state, selected_city, selected_slice_city, '5 Yrs (2020-2025)', filter_table)
 
 
 with irr_3:
-    pass
+    if selected_horizon_city == '5 Yrs Ahead (2025-2030)':
+        st.subheader('IRR Analysis: 5 Yrs Ahead')
+    else:
+        st.write('Analysis: 5 Yrs Ahead (2025Q1-2030Q1)')
+    
+    transform_data(summary, general, selected_state, selected_city, selected_slice_city, '5 Yrs Ahead (2025-2030)', filter_table)
 
 
 st.subheader('Cashflow Analysis 🏦' + selected_state + '  - ' + selected_city + ' - '+
@@ -446,3 +509,30 @@ e_current = e_current[['Sale Price', 'Effective Rent','Cap Rate','Occupancy',
                        'NOI']]
 
 st.dataframe(e_current, use_container_width=True)
+
+
+st.subheader('Supply and Demand Analysis 📈 ' + selected_state + '  - ' + selected_city + ' - ' +
+            selected_slice_city + ' - ' + str(selected_horizon_city) + ' Yrs', divider='green')
+st.write('The table below shows the supply and demand analysis for the selected market, slice and horizon')
+
+s_current = filter_table(equilibrium, selected_state, selected_city, selected_slice_city, selected_horizon_city).drop(columns=['market'])
+s_current.index = pd.to_datetime(s_current.index).strftime('%Y-%m')
+
+
+for i in s_current.columns:
+    s_current[i] = s_current[i].apply(lambda x: f'{x:,.0f}')
+
+s_current.columns = ['Absorption (units)', 'Demand (units)', 'Supply (units)', 'Delivered (units)']
+
+s_current = s_current[['Demand (units)', 'Supply (units)', 'Absorption (units)', 'Delivered (units)']]
+
+s_1 , s_2 = st.columns([4, 1])
+
+with s_1:
+    st.dataframe(s_current, use_container_width=True)
+
+with s_2:
+    sd = filter_table(summary, selected_state, selected_city, selected_slice_city, selected_horizon_city).copy()
+    st.metric('Demand vs Supply', format(sd['demand_vs_supply'].values[0], '.2%'))
+    st.metric('Demand YoY Growth', format(sd['demand_yoy_growth'].values[0], '.2%'))
+    st.metric('Supply YoY Growth', format(sd['supply_yoy_growth'].values[0], '.2%'))
