@@ -76,16 +76,17 @@ with st.sidebar:
     selected_city = st.selectbox('Select City', selected_cities, index=0)
     st.session_state.selected_city = selected_city
 
-    selected_slices_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city)]['slice'].unique()
-    selected_slice_city = st.selectbox('Select Class', selected_slices_city, index=0, key='slice_city')
-    st.session_state.selected_slice_city = selected_slice_city
+    # selected_slices_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city)]['slice'].unique()
+    # selected_slice_city = st.selectbox('Select Class', selected_slices_city, index=0, key='slice_city')
+    # st.session_state.selected_slice_city = selected_slice_city
+    selected_slice_city = slice
 
     # selected_horizon_city = summary[(summary['state'] == selected_state) & (summary['city'] == selected_city) & 
     #                                 (summary['slice'] == selected_slice_city)]['horizon'].unique()
     # selected_horizon_city = st.selectbox('Select Horizon - To specify cashflow, loan conditions etc', selected_horizon_city, index=0, key='horizon_city')
     # st.session_state.selected_horizon_city = selected_horizon_city
     selected_horizon_city = horizon
-    
+
 
 unidad_columna = mapa_columns.loc[filtro_columnas_mapa_mostrar].values[1]
 
