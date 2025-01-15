@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pydeck as pdk
 
+
 st.set_page_config(layout="wide", page_title="Real Estate Report", page_icon="🏠", 
                     initial_sidebar_state="expanded")
 
