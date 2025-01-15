@@ -1,51 +1,95 @@
 ,state,city,market,value,latitude,longitude
+5636217,Ohio,Akron,"Akron,Ohio",697936.5625,41.083064,-81.518485
+5636949,New York,Albany,"Albany,New York",899899.0,42.6511674,-73.754968
+5637631,New Mexico,Albuquerque,"Albuquerque,New Mexico",925487.8125,35.0841034,-106.650985
 5641178,Georgia,Atlanta,"Atlanta,Georgia",6393851.0,33.7489924,-84.3902644
+5642194,Georgia,Augusta,"Augusta,Georgia",631443.125,33.4709714,-81.9748429
 5642560,Texas,Austin,"Austin,Texas",2533181.0,30.2711286,-97.7436995
+5642901,California,Bakersfield,"Bakersfield,California",912931.5,35.3738712,-119.019463
 5643267,Maryland,Baltimore,"Baltimore,Maryland",2844999.0,39.2908816,-76.610759
+5644184,Louisiana,Baton Rouge,"Baton Rouge,Louisiana",857609.0625,30.4494155,-91.1869659
 5647150,Alabama,Birmingham,"Birmingham,Alabama",1195085.0,33.5206824,-86.8024326
+5649089,Idaho,Boise,"Boise,Idaho",847406.125,43.6166163,-116.200886
 5649455,Massachusetts,Boston,"Boston,Massachusetts",4973974.0,42.3554334,-71.060511
 5651638,New York,Buffalo,"Buffalo,New York",1150635.0,42.8867166,-78.8783922
+5655398,South Carolina,Charleston,"Charleston,South Carolina",861363.25,32.7884363,-79.9399309
 5656008,North Carolina,Charlotte,"Charlotte,North Carolina",2837841.0,35.2272086,-80.8430827
+5656740,Tennessee,Chattanooga,"Chattanooga,Tennessee",583210.375,35.0457219,-85.3094883
 5657396,Illinois,Chicago,"Chicago,Illinois",9423351.0,41.8755616,-87.6244212
 5658062,Ohio,Cincinnati,"Cincinnati,Ohio",2269257.0,39.1014537,-84.5124602
 5658794,Ohio,Cleveland,"Cleveland,Ohio",2062054.875,41.4996574,-81.6936772
+5660164,Colorado,Colorado Springs,"Colorado Springs,Colorado",778882.0,38.8339578,-104.825348
+5660896,South Carolina,Columbia,"Columbia,South Carolina",862592.5625,34.0003117,-81.0331309
 5661942,Ohio,Columbus,"Columbus,Ohio",2213507.0,39.9622601,-83.0007065
 5663398,Texas,Dallas,"Dallas,Texas",8315549.0,32.7762719,-96.7968559
+5664953,Ohio,Dayton,"Dayton,Ohio",814466.125,39.7589478,-84.1916069
+5665304,Florida,Daytona Beach,"Daytona Beach,Florida",726553.3125,29.2108147,-81.0228331
 5666212,Colorado,Denver,"Denver,Colorado",3043768.0,39.7392364,-104.984862
+5666578,Iowa,Des Moines,"Des Moines,Iowa",707598.5625,41.5868654,-93.6249494
 5666944,Michigan,Detroit,"Detroit,Michigan",4358573.0,42.3315509,-83.0466403
+5668685,North Carolina,Durham,"Durham,North Carolina",619351.1875,35.996653,-78.9018053
 5669051,California,East Bay,"East Bay,California",2806571.0,33.6811328,-117.2592037
+5670333,Texas,El Paso,"El Paso,Texas",879765.6875,31.7601164,-106.4870404
 5676349,Florida,Fort Lauderdale,"Fort Lauderdale,Florida",1987213.0,26.1223084,-80.1433786
+5676715,Florida,Fort Myers,"Fort Myers,Florida",839271.4375,26.640628,-81.8723084
 5677751,California,Fresno,"Fresno,California",1018322.0,36.7394421,-119.78483
 5681190,Michigan,Grand Rapids,"Grand Rapids,Michigan",1109027.0,42.9632425,-85.6678639
+5682722,North Carolina,Greensboro,"Greensboro,North Carolina",795985.6875,36.0726355,-79.7919754
+5683416,South Carolina,Greenville,"Greenville,South Carolina",984653.8125,34.851354,-82.3984882
+5685107,Pennsylvania,Harrisburg,"Harrisburg,Pennsylvania",608327.0625,40.2663107,-76.8861122
 5685753,Connecticut,Hartford,"Hartford,Connecticut",1211266.0,41.764582,-72.6908547
+5687659,Hawaii,Honolulu,"Honolulu,Hawaii",989651.9375,21.304547,-157.855676
 5688708,Texas,Houston,"Houston,Texas",7628614.0,29.7589382,-95.3676974
+5689400,Alabama,Huntsville,"Huntsville,Alabama",534944.875,34.729847,-86.5859011
 5690113,Indiana,Indianapolis,"Indianapolis,Indiana",2184315.0,39.7683331,-86.1583502
 5690479,California,Inland Empire,"Inland Empire,California",4718328.0,34.0687165,-117.43796852886683
+5691821,Mississippi,Jackson,"Jackson,Mississippi",567565.5,32.2998686,-90.1830408
 5692548,Florida,Jacksonville,"Jacksonville,Florida",1744138.0,30.3321838,-81.655651
 5696161,Missouri,Kansas City,"Kansas City,Missouri",2240899.0,39.100105,-94.5781416
+5696876,Texas,Killeen,"Killeen,Texas",507112.6875,31.1171441,-97.727796
+5697783,Tennessee,Knoxville,"Knoxville,Tennessee",946454.5,35.9603948,-83.9210261
+5700089,Florida,Lakeland,"Lakeland,Florida",838814.5625,28.0394654,-81.9498042
+5700425,Pennsylvania,Lancaster,"Lancaster,Pennsylvania",561082.0,40.03813,-76.3056686
 5701833,Nevada,Las Vegas,"Las Vegas,Nevada",2369459.0,36.1672559,-115.148516
+5703149,Pennsylvania,Lehigh Valley,"Lehigh Valley,Pennsylvania",873940.4375,40.5947107,-75.5679786
+5704003,Kentucky,Lexington,"Lexington,Kentucky",528103.8125,38.0464066,-84.4970393
+5705029,Arkansas,Little Rock,"Little Rock,Arkansas",768550.0,34.7465071,-92.2896267
 5705754,New York,Long Island,"Long Island,New York",2908773.0,40.85149705,-73.09942966988302
 5706792,California,Los Angeles,"Los Angeles,California",9680627.0,34.0536909,-118.242766
 5707158,Kentucky,Louisville,"Louisville,Kentucky",1331633.0,38.2542376,-85.759407
+5708822,Wisconsin,Madison,"Madison,Wisconsin",705256.25,43.074761,-89.3837613
+5710493,Texas,McAllen,"McAllen,Texas",911216.1875,26.204114,-98.2300605
+5711125,Florida,Melbourne,"Melbourne,Florida",650689.8125,28.0785034,-80.6077908
 5711491,Tennessee,Memphis,"Memphis,Tennessee",1339553.0,35.1460249,-90.0517638
 5712183,Florida,Miami,"Miami,Florida",2716911.0,25.7820042,-80.22256438834017
 5713533,Wisconsin,Milwaukee,"Milwaukee,Wisconsin",1563136.0,43.0386475,-87.9090751
 5713899,Minnesota,Minneapolis,"Minneapolis,Minnesota",3763652.0,44.9772995,-93.2654692
+5714931,California,Modesto,"Modesto,California",551824.5625,37.6393419,-120.9968892
+5717939,South Carolina,Myrtle Beach,"Myrtle Beach,South Carolina",572078.0,33.6956461,-78.8900409
 5719010,Tennessee,Nashville,"Nashville,Tennessee",2135631.0,36.1622767,-86.7742984
+5719742,Connecticut,New Haven,"New Haven,Connecticut",862587.5,41.3082138,-72.9250518
 5720108,Louisiana,New Orleans,"New Orleans,Louisiana",1252872.0,29.9759983,-90.0782127
 5720474,New York,New York,"New York,New York",14573070.0,40.7127281,-74.0060152
 5721198,Virginia,Norfolk,"Norfolk,Virginia",1775261.0,36.8493695,-76.2899539
 5721564,New Jersey,Northern New Jersey,"Northern New Jersey,New Jersey",2643562.0,40.85826685,-74.0636703
+5721930,Arkansas,Northwest Arkansas,"Northwest Arkansas,Arkansas",626258.4375,36.27981,-94.30259016595679
+5723560,Utah,Ogden,"Ogden,Utah",733798.25,41.2230048,-111.9738429
 5723926,Oklahoma,Oklahoma City,"Oklahoma City,Oklahoma",1492485.0,35.4729886,-97.5170536
+5724640,Nebraska,Omaha,"Omaha,Nebraska",998466.9375,41.2587459,-95.9383758
 5725006,California,Orange County,"Orange County,California",3143725.0,33.750631,-117.8722311
 5725372,Florida,Orlando,"Orlando,Florida",2878448.0,28.5421109,-81.3790304
 5726377,Florida,Palm Beach,"Palm Beach,Florida",1564001.0,26.6279798,-80.4494174
+5727290,Florida,Pensacola,"Pensacola,Florida",535760.3125,30.421309,-87.2169149
 5728022,Pennsylvania,Philadelphia,"Philadelphia,Pennsylvania",6267935.0,39.9527237,-75.1635262
 5728388,Arizona,Phoenix,"Phoenix,Arizona",5154877.0,33.4484367,-112.074141
 5728998,Pennsylvania,Pittsburgh,"Pittsburgh,Pennsylvania",2337972.0,40.4416941,-79.9900861
+5729933,Florida,Port St. Lucie,"Port St. Lucie,Florida",541823.9375,27.2939333,-80.3503283
+5730299,Maine,Portland,"Portland,Maine",569529.5,43.6573605,-70.2586618
 5730665,Oregon,Portland,"Portland,Oregon",2537445.0,45.5202471,-122.674194
 5731739,Rhode Island,Providence,"Providence,Rhode Island",1687316.0,41.8239891,-71.4128343
+5732105,Utah,Provo,"Provo,Utah",744115.1875,40.2337289,-111.6587085
 5733345,North Carolina,Raleigh,"Raleigh,North Carolina",1538739.0,35.7803977,-78.6390989
+5734784,Nevada,Reno,"Reno,Nevada",510455.8125,39.5261206,-119.8126581
 5735150,Virginia,Richmond,"Richmond,Virginia",1387905.0,37.5385087,-77.43428
 5736200,New York,Rochester,"Rochester,New York",1073686.0,43.157285,-77.615214
 5737614,California,Sacramento,"Sacramento,California",2434851.0,38.5810606,-121.493895
@@ -55,8 +99,21 @@
 5740662,California,San Diego,"San Diego,California",3286515.0,32.7174202,-117.162772
 5741028,California,San Francisco,"San Francisco,California",1559246.0,37.7792588,-122.4193286
 5741394,California,San Jose,"San Jose,California",1967235.0,37.3361663,-121.890591
+5743889,Florida,Sarasota,"Sarasota,Florida",915593.875,27.3365805,-82.5308545
+5744584,Pennsylvania,Scranton,"Scranton,Pennsylvania",567754.25,41.4086874,-75.6621294
 5744950,Washington,Seattle,"Seattle,Washington",4120994.25,47.6038321,-122.330062
+5748701,Washington,Spokane,"Spokane,Washington",619488.125,47.6571934,-117.42351
+5749355,Massachusetts,Springfield,"Springfield,Massachusetts",623956.5,42.1018764,-72.5886727
+5751294,Connecticut,Stamford,"Stamford,Connecticut",958637.375,41.0534302,-73.5387341
+5752386,California,Stockton,"Stockton,California",808362.625,37.9577016,-121.290779
+5752996,New York,Syracuse,"Syracuse,New York",649668.1875,43.0481221,-76.1474244
 5753695,Florida,Tampa,"Tampa,Florida",3386766.0,27.9477595,-82.458444
+5755002,Ohio,Toledo,"Toledo,Ohio",600975.6875,41.6529143,-83.5378173
 5755986,Arizona,Tucson,"Tucson,Arizona",1071464.0,32.2228765,-110.974847
 5756352,Oklahoma,Tulsa,"Tulsa,Oklahoma",1051446.0,36.1563122,-95.9927516
+5758446,California,Ventura,"Ventura,California",829790.125,34.4458248,-119.0779359
 5760737,District of Columbia,Washington,"Washington,District of Columbia",6477537.0,38.8950368,-77.0365427
+5762940,Kansas,Wichita,"Wichita,Kansas",662274.1875,37.68118565,-97.38720322122725
+5764589,North Carolina,Winston,"Winston,North Carolina",699430.4375,36.0998131,-80.2440518
+5764955,Massachusetts,Worcester,"Worcester,Massachusetts",988134.875,42.2625621,-71.8018877
+5765939,Ohio,Youngstown,"Youngstown,Ohio",530236.1875,41.1035786,-80.6520161
