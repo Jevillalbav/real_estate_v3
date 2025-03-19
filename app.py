@@ -302,10 +302,10 @@ fig.update_layout(template='simple_white', title='Market Metrics: ' + selected_s
                   xaxis = dict(title='Date', showgrid=False, zeroline=False, tickformat='%Y-%m', 
                                tickfont=dict(size=15, color='black'), domain=[0, 0.9]),
                   yaxis = dict(title='Price (USD)', tickformat='$,.0f', 
-                                 showgrid=False, zeroline=False, tickfont=dict(size=15, color='darkblue'), titlefont=dict(size=15, color='darkblue')),
+                                 showgrid=False, zeroline=False, tickfont=dict(size=15, color='darkblue') ),
 
                 yaxis2=dict(title='Rent (USD)', overlaying='y', side='right',  showgrid=False, zeroline=False, 
-                            tickfont=dict(size=15, color='darkgreen'), position=0.95, titlefont=dict(size=15, color='darkgreen'), visible=False),
+                            tickfont=dict(size=15, color='darkgreen'), position=0.95, visible=False),
                 yaxis3=dict(title='Occupancy (%)', overlaying='y', side='right', showgrid=False, zeroline=False,  visible=False, 
                             range=[0.5, 1.25]),
                 showlegend = False,  
